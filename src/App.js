@@ -1,69 +1,46 @@
 /** @format */
-import React, { useRef, useEffect, useState } from "react";
-import "./App.css";
-import { TweenMax, gsap, Power3 } from "gsap";
 
-function App() {
-	let circle = useRef(null);
-	let circleRed = useRef(null);
-	let circleBlue = useRef(null);
+import React, { useRef, useEffect } from "react";
+import "./App.scss";
+import People from "./images/people.webp";
+import { gsap, Power2 } from "gsap";
+import CSSRulePlugin from "gsap/CSSRulePlugin";
 
-	const [state, setState] = useState[false];
+const App = () => {
+	let image = useRef(null);
+	let container = useRef(null);
+	let imageReveal = CSSRulePlugin.getRule(".img-container:after");
 
-	const handleExpand = () => {
-		TweenMax.to(circleRed, 0.8, {
-			width: 200,
-			height: 200,
-			opacity: 0.2,
-			x: 200,
-			ease: Power3.easeOut,
-			delay: 0.2,
-		});
-		setState(true);
-	};
+	let tl = gsap.timeline();
 
 	useEffect(() => {
-		TweenMax.from(circle, 0.8, {
-			opacity: 0.2,
-			x: 200,
-			ease: Power3.easeOut,
-		});
-		TweenMax.from(circleRed, 0.8, {
-			opacity: 0.2,
-			x: 200,
-			ease: Power3.easeOut,
-			delay: 0.2,
-		});
-		TweenMax.from(circleBlue, 0.8, {
-			opacity: 0.2,
-			x: 200,
-			ease: Power3.easeOut,
-			delay: 0.4,
+		tl.to(container, 0, { css: { visibility: "visible" } });
+		tl.to(imageReveal, 1.4, { width: "0%", ease: Power2.easeInOut });
+		tl.from(image, 1, {
+			scale: 1.6,
+			ease: Power2.easeInOut,
+			delay: -1.4,
 		});
 	}, []);
+
 	return (
-		<div className="App">
-			<header className="App-header">
-				<div className="circle-container">
-					<div
-						ref={(el) => {
-							circle = el;
-						}}
-						className="circle"></div>
-					<div
-						ref={(el) => {
-							circleRed = el;
-						}}
-						className="circle red"></div>
-					<div
-						ref={(el) => {
-							circleBlue = el;
-						}}
-						className="circle blue"></div>
-				</div>
-			</header>
-		</div>
+		<section className="main">
+			<p>GSAP IMAGE REVEAL</p>
+			<div className="container" ref={(el) => (container = el)}>
+				<>
+					<div className="img-container">
+						<img
+							ref={(el) => {
+								image = el;
+							}}
+							src={People}
+							alt="People"
+						/>
+					</div>
+				</>
+			</div>
+		</section>
 	);
-}
+};
 
 export default App;
